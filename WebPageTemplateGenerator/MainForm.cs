@@ -94,25 +94,25 @@ namespace WebPageTemplateGenerator
         /// </summary>
         public MainForm( string loadfile )
         {
-            AppDomain.CurrentDomain.AssemblyResolve += ( sender, args ) =>
-            {
-                string resourceName = new AssemblyName(args.Name).Name + ".dll";
-                string resource = Array.Find(this.GetType().Assembly.GetManifestResourceNames(), element => element.EndsWith(resourceName));
+            GetAssemblies();
+            InitializeComponent();
+            InitializeGUI();
+            InitializeNewForm(loadfile);           
+        }
 
-                using ( var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource) )
-                {
-                    Byte[] assemblyData = new Byte[stream.Length];
-                    stream.Read(assemblyData, 0, assemblyData.Length);
-                    return Assembly.Load(assemblyData);
-                }
-            };
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="loadfile"></param>
+        private void InitializeNewForm( string loadfile )
+        {
+            dataGridView1.Rows.Clear();
+            watermarkTextBox1.Clear();
+            listView1.Clear();
 
             SelectedImages = new List<string>();
             PagesToCreate = new List<PageData>();
             CreationDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-
-            InitializeComponent();
-            InitializeGUI();
 
             if ( !String.IsNullOrEmpty(loadfile) )
             {
@@ -143,6 +143,34 @@ namespace WebPageTemplateGenerator
             toolStripStatusLabel1.Text = "Folder will be created in " + CreationDirectory;
         }
         #endregion
+
+        #region Private Functions
+        
+        /// <summary>
+        /// Loads external assemblies as reousrces (e.g. WatermarkTexBox.dll)
+        /// </summary>
+        private void GetAssemblies()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += ( sender, args ) =>
+            {
+                string resourceName = new AssemblyName(args.Name).Name + ".dll";
+                string resource = Array.Find(this.GetType().Assembly.GetManifestResourceNames(), element => element.EndsWith(resourceName));
+
+                if ( !String.IsNullOrEmpty(resource) )
+                {
+                    using ( var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource) )
+                    {
+                        Byte[] assemblyData = new Byte[stream.Length];
+                        stream.Read(assemblyData, 0, assemblyData.Length);
+                        return Assembly.Load(assemblyData);
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            };
+        }
 
         /// <summary>
         /// 
@@ -204,7 +232,7 @@ namespace WebPageTemplateGenerator
             //Create XML Directory
             XmlDocument navDoc = new XmlDocument();
             navDoc.LoadXml(Properties.Resources.XMLDoc);
-            XmlNode rootNode = navDoc.SelectSingleNode("navigation");          
+            XmlNode rootNode = navDoc.SelectSingleNode("navigation");
 
             foreach ( PageData page in PagesToCreate )
             {
@@ -226,7 +254,7 @@ namespace WebPageTemplateGenerator
                 target.Value = page.URL;
                 subitemNode.Attributes.Append(target);
 
-                if( page.IsExternal)
+                if ( page.IsExternal )
                 {
                     XmlAttribute external = navDoc.CreateAttribute("external");
                     external.Value = "true";
@@ -257,6 +285,8 @@ namespace WebPageTemplateGenerator
             return String.IsNullOrEmpty(CourseName);
         }
 
+        #endregion
+        
         #region Save and Load Data
 
         const string SAVEDATA_XML_ROOT   = "Data";
@@ -320,7 +350,32 @@ namespace WebPageTemplateGenerator
             }
             rootNode.AppendChild(imagesNode);
             document.AppendChild(rootNode);
-            document.Save(CreationDirectory + "\\"+ CourseName + ".rbbtemplate");
+
+            string saveFile = CreationDirectory + "\\"+ CourseName + ".rbbtemplate";
+            
+            DialogResult result = System.Windows.Forms.DialogResult.Yes;
+            if ( File.Exists(saveFile) )
+            {
+                result = MessageBox.Show("File Already Exists. Yes - Overwrite file. No - rename it to (#). Cancel - nothing will be saved", 
+                    "Replace File", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+            }
+
+            switch( result)
+            {
+                case System.Windows.Forms.DialogResult.Yes:
+                    document.Save(saveFile);
+                    break;
+                case System.Windows.Forms.DialogResult.No:
+                    int replace = 1;
+                    string newFile = CreationDirectory + "\\" + CourseName + " ({0}).rbbtemplate";
+                    while ( File.Exists(String.Format(newFile, replace)) )
+                    {
+                        replace++;
+                    }
+                    saveFile = String.Format(newFile, replace);
+                    document.Save(saveFile);
+                    break;
+            }
         }
 
         public void LoadData( string path )
@@ -376,7 +431,55 @@ namespace WebPageTemplateGenerator
         }
 
         #endregion
-        
+
+        #region Menu Actions
+
+        /// <summary>
+        /// Clears data
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NewMenuItem_Click( object sender, EventArgs e )
+        {
+            InitializeNewForm(String.Empty);
+        }
+
+        /// <summary>
+        /// Saves data to file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SaveButton_Click( object sender, EventArgs e )
+        {
+            SaveData();
+        }
+
+        /// <summary>
+        /// loads data from file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LoadButton_Click( object sender, EventArgs e )
+        {
+            OpenFileDialog d = new OpenFileDialog();
+            d.Multiselect = false;
+            d.Filter = "RBB Web Templates|*.rbbtemplate";
+            DialogResult dr = d.ShowDialog();
+            if ( dr == DialogResult.OK )
+                LoadData(d.FileName);
+        }
+
+        /// <summary>
+        /// Quits application
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void QuitButton_Click( object sender, EventArgs e )
+        {
+            this.Dispose();
+        }
+        #endregion
+
         #region Event Listeners
 
         /// <summary>
@@ -489,7 +592,11 @@ namespace WebPageTemplateGenerator
             
         }
         
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CourseNameChanged( object sender, EventArgs e )
         {
             CourseName = watermarkTextBox1.Text;
@@ -505,29 +612,12 @@ namespace WebPageTemplateGenerator
             }
 
         }
-
-        private void SaveButton_Click( object sender, EventArgs e )
-        {
-            SaveData();
-        }
-
-        private void LoadButton_Click( object sender, EventArgs e )
-        {
-            OpenFileDialog d = new OpenFileDialog();
-            d.Multiselect = false;
-            d.Filter = "RBB Web Templates|*.rbbtemplate";
-            DialogResult dr = d.ShowDialog();
-            if( dr == DialogResult.OK)
-                LoadData( d.FileName );
-        }
-
-        private void QuitButton_Click( object sender, EventArgs e )
-        {
-            this.Dispose();
-        }
-
-        #endregion
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnCellValueChanged( object sender, DataGridViewCellEventArgs e )
         {   
             DataGridViewCell cell  = ((DataGridView)sender).CurrentCell;
@@ -553,5 +643,6 @@ namespace WebPageTemplateGenerator
             }
         }
 
+        #endregion
     }
 }
