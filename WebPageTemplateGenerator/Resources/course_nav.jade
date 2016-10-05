@@ -1,0 +1,23 @@
+script( type="text/javascript", src="/js/nav.js")
+#sidebar
+    a.mobilemenu(href="#sidebar"): i.fa.fa-bars
+    #main-nav
+        #nav-container
+            #profile.clearfix
+                .portrate.hidden-xs
+                .title
+                    h2 Ronald B. Bucinell, Ph.D., P.E.
+                    h3 Union College
+            nav
+                ul#navigation
+                    script.
+                        $(function() {
+                            displayResult( "content/nav.xml", "content/nav_transform.xsl", "navigation" );
+                            initMenu();
+                        });
+    .social-icons
+        ul
+            li: a(href="/data/PE_Ronald_B_Bucinell_PhD.msg"): i.fa.fa-envelope-o
+            li: a(href="https://www.linkedin.com/pub/ronald-bucinell/15/772/5a4"): i.fa.fa-linkedin
+            li: a(href="http://www.researchgate.net/profile/Ronald_Bucinell"): i.ai.ai-researchgate
+    
