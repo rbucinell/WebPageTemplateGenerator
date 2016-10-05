@@ -49,9 +49,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WatermarkTextBox">
-      <HintPath>..\..\..\..\..\AppData\Local\Microsoft\VisualStudio\10.0\Extensions\havardhu\WatermarkTextBox Control\1.0\WatermarkTextBox.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+    <Reference Include="WatermarkTextBox, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>lib\WatermarkTextBox.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -115,8 +115,10 @@
     <None Include="Resources\nav_transform.xsl" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\Debug\WatermarkTextBox.dll" />
     <Content Include="favicon.ico" />
     <None Include="Resources\nav_transform1.xsl" />
+    <EmbeddedResource Include="lib\WatermarkTextBox.dll" />
     <Content Include="Resources\rbbtemplate_icon.ico" />
     <None Include="Resources\favicon.ico" />
     <None Include="Resources\attention-16.png" />

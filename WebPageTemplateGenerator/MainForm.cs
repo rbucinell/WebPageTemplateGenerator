@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
+using System.Reflection;
 namespace WebPageTemplateGenerator
 {
     public struct PageData
@@ -93,6 +94,19 @@ namespace WebPageTemplateGenerator
         /// </summary>
         public MainForm( string loadfile )
         {
+            AppDomain.CurrentDomain.AssemblyResolve += ( sender, args ) =>
+            {
+                string resourceName = new AssemblyName(args.Name).Name + ".dll";
+                string resource = Array.Find(this.GetType().Assembly.GetManifestResourceNames(), element => element.EndsWith(resourceName));
+
+                using ( var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource) )
+                {
+                    Byte[] assemblyData = new Byte[stream.Length];
+                    stream.Read(assemblyData, 0, assemblyData.Length);
+                    return Assembly.Load(assemblyData);
+                }
+            };
+
             SelectedImages = new List<string>();
             PagesToCreate = new List<PageData>();
             CreationDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
