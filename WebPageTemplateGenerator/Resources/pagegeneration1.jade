@@ -1,0 +1,35 @@
+//- Create Page Header
+mixin createCourseTemplate(menu, pageName, contenturl)
+	head
+		include ./course_head.jade
+	body
+		article#wrapper
+			//- side navigation menu
+			include ./course_nav.jade
+			
+			//- main content
+			main.container#main
+				header.page-header
+					h1#pageheader #{pageName}
+					ul.breadcrumb
+						li #{menu}
+						li.active: a(href="#") #{pageName}
+				section#dadcontent    
+					script. 
+						$( "#dadcontent" ).load( "#{contenturl}" );
+					
+			//- footer
+			footer#footer
+				.container
+					ul
+						li: i.fa.fa-phone: |  (518) 388-6023
+						li: i.fa.fa-envelope-o: |  bucinelr@union.edu
+			//- scripts
+			script.
+				var loc = window.location.pathname;
+				var last = loc.lastIndexOf('/');
+				loc = loc.substring(0,last);
+				var dir = loc.substring(loc.lastIndexOf('/')+1).toUpperCase();
+				document.title = dir.toUpperCase() + "| #{pageName}";
+				document.getElementById("pageheader").innerHTML = dir + ": #{pageName}";
+		block
