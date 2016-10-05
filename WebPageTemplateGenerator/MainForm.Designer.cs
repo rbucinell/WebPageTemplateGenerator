@@ -43,18 +43,18 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.CourseNameAlertBox = new System.Windows.Forms.PictureBox();
             this.removePicturesButton = new System.Windows.Forms.Button();
             this.addPicturesButton = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.PageName = new WebPageTemplateGenerator.DataGridViewWatermarkColumn();
             this.MenuCategory = new WebPageTemplateGenerator.DataGridViewWatermarkColumn();
             this.PageURL = new WebPageTemplateGenerator.DataGridViewWatermarkColumn();
             this.External = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CourseNameAlertBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -183,21 +183,6 @@
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.QuitButton_Click);
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.PageName,
-            this.MenuCategory,
-            this.PageURL,
-            this.External});
-            this.dataGridView1.Location = new System.Drawing.Point(15, 60);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(590, 205);
-            this.dataGridView1.TabIndex = 4;
-            this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnCellValueChanged);
-            // 
             // CourseNameAlertBox
             // 
             this.CourseNameAlertBox.BackColor = System.Drawing.Color.Salmon;
@@ -220,6 +205,7 @@
             this.removePicturesButton.Size = new System.Drawing.Size(38, 38);
             this.removePicturesButton.TabIndex = 15;
             this.removePicturesButton.UseVisualStyleBackColor = false;
+            this.removePicturesButton.Click += new System.EventHandler(this.removePicturesButton_Click);
             // 
             // addPicturesButton
             // 
@@ -233,6 +219,21 @@
             this.addPicturesButton.TabIndex = 9;
             this.addPicturesButton.UseVisualStyleBackColor = false;
             this.addPicturesButton.Click += new System.EventHandler(this.addPicturesButton_Click);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.PageName,
+            this.MenuCategory,
+            this.PageURL,
+            this.External});
+            this.dataGridView1.Location = new System.Drawing.Point(15, 60);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridView1.Size = new System.Drawing.Size(590, 205);
+            this.dataGridView1.TabIndex = 4;
+            this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnCellValueChanged);
             // 
             // PageName
             // 
@@ -257,10 +258,10 @@
             // 
             // External
             // 
-            this.External.FalseValue = "false";
+            this.External.FalseValue = "False";
             this.External.HeaderText = "External Link?";
             this.External.Name = "External";
-            this.External.TrueValue = "true";
+            this.External.TrueValue = "True";
             // 
             // MainForm
             // 
@@ -282,14 +283,17 @@
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximumSize = new System.Drawing.Size(633, 501);
+            this.MinimumSize = new System.Drawing.Size(633, 501);
             this.Name = "MainForm";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Create a course webpage tempalate";
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CourseNameAlertBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

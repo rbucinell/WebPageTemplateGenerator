@@ -434,6 +434,11 @@ namespace WebPageTemplateGenerator
             MessageBox.Show(this, "Generation Complete. Place created directory in courses directory, and don't forget to add link!", "Complete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
+        /// <summary>
+        /// Add pictures with Open File Dialog
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addPicturesButton_Click( object sender, EventArgs e )
         {
             OpenFileDialog addImagesDialog = new OpenFileDialog();
@@ -453,6 +458,23 @@ namespace WebPageTemplateGenerator
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void removePicturesButton_Click( object sender, EventArgs e )
+        {
+            ListView.SelectedListViewItemCollection selectedPics = listView1.SelectedItems;
+            foreach ( ListViewItem lvi in selectedPics )
+            {
+                listView1.Items.Remove(lvi);
+                SelectedImages.RemoveAll(x => x.Contains(lvi.Text));
+            }
+            
+        }
+        
 
         private void CourseNameChanged( object sender, EventArgs e )
         {
@@ -516,6 +538,6 @@ namespace WebPageTemplateGenerator
                 }
             }
         }
-        
+
     }
 }
