@@ -3,3 +3,5 @@
 ################################################################################
 
 /.vs
+/WebPageTemplateGenerator/obj/x86/Debug
+/WebPageTemplateGenerator/bin/Debug
