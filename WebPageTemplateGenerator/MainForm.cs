@@ -533,7 +533,7 @@ namespace WebPageTemplateGenerator
 
             GenerateNavigationDocument();
 
-            File.WriteAllText(CourseDirectory + ".buildjade.bat", Properties.Resources.buildjade_bat);
+            //File.WriteAllText(CourseDirectory + ".buildjade.bat", Properties.Resources.buildjade_bat);
 
             //create the rotation pictuers
             string roationPath = String.Format(coursePath, "img\\rotation\\");
